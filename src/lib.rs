@@ -139,7 +139,7 @@ impl PartitionerBuilder {
     ///
     /// - Will return `Err` if node index can't be converted to u32
     ///
-    pub fn partition_edge_weighted<N, E: Into<i32> + Copy>(
+    pub fn partition_edge_weighted<N, E: Into<i32> + Clone>(
         self,
         graph: &Graph<N, E, petgraph::Undirected>,
         num_partitions: u32,
@@ -160,7 +160,7 @@ impl PartitionerBuilder {
         let mut edge_weights: Vec<i32> = Vec::with_capacity(graph.edge_count());
         for node in graph.node_indices() {
             for edge in graph.edges(node) {
-                edge_weights.push((*edge.weight()).into());
+                edge_weights.push(edge.weight().clone().into());
             }
         }
         partition_builder.pin_mut().set_edge_weights(edge_weights);
@@ -182,7 +182,7 @@ impl PartitionerBuilder {
     /// - Will return `Err` if not all nodes are weighted
     /// - Will return `Err` if node index can't be converted to u32
     ///x
-    pub fn partition_weighted<N: Into<i32> + Copy, E: Into<i32> + Copy>(
+    pub fn partition_weighted<N: Into<i32> + Clone, E: Into<i32> + Clone>(
         self,
         graph: &Graph<N, E, petgraph::Undirected>,
         num_partitions: u32,
@@ -207,11 +207,11 @@ impl PartitionerBuilder {
             node_weights.push(
                 graph
                     .node_weight(node)
-                    .map(|nw| (*nw).into())
+                    .map(|nw| nw.clone().into())
                     .ok_or(KaminParError::NodeWeightMissing)?,
             );
             for edge in graph.edges(node) {
-                edge_weights.push((*edge.weight()).into());
+                edge_weights.push(edge.weight().clone().into());
             }
         }
         partition_builder.pin_mut().set_edge_weights(edge_weights);
