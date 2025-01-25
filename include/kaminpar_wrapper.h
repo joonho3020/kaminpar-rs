@@ -15,7 +15,7 @@ public:
     void set_seed(uint64_t seed);
     void set_edge_weights(rust::Vec<int32_t> edge_weights);
     void set_node_weights(rust::Vec<int32_t> node_weights);
-    std::unique_ptr<std::vector<uint32_t>> partition(rust::Vec<uint64_t> nodes, rust::Vec<uint32_t> edges, uint32_t num_partitions);
+    std::unique_ptr<std::vector<uint32_t>> partition(rust::Vec<uint64_t> nodes, uint32_t nnodes, rust::Vec<uint32_t> edges, uint32_t nedges, uint32_t num_partitions);
 
 private:
     int m_threads;

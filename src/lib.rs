@@ -31,7 +31,9 @@ mod ffi {
         fn partition(
             self: Pin<&mut PartitionerBuilder>,
             nodes: Vec<u64>,
+            nnodes: u32,
             edges: Vec<u32>,
+            nedges: u32,
             num_partitions: u32,
         ) -> UniquePtr<CxxVector<u32>>;
     }
@@ -122,12 +124,15 @@ impl PartitionerBuilder {
 
         let (nodes, edges) = Self::create_edges_and_nodes(graph)?;
 
+        let nnodes = nodes.len() as u32;
+        let nedges = edges.len() as u32;
+
         partition_builder.pin_mut().set_epsilon(self.epsilon);
         partition_builder.pin_mut().set_seed(self.seed);
         let output_assignments_cpp =
             partition_builder
                 .pin_mut()
-                .partition(nodes, edges, num_partitions);
+                .partition(nodes, nnodes, edges, nedges, num_partitions);
         let output_assignments: Vec<u32> = output_assignments_cpp.iter().copied().collect();
         Ok(output_assignments)
     }
@@ -156,6 +161,8 @@ impl PartitionerBuilder {
         }
 
         let (nodes, edges) = Self::create_edges_and_nodes(graph)?;
+        let nnodes = nodes.len() as u32;
+        let nedges = edges.len() as u32;
 
         let mut edge_weights: Vec<i32> = Vec::with_capacity(graph.edge_count());
         for node in graph.node_indices() {
@@ -169,7 +176,7 @@ impl PartitionerBuilder {
         let output_assignments_cpp =
             partition_builder
                 .pin_mut()
-                .partition(nodes, edges, num_partitions);
+                .partition(nodes, nnodes, edges, nedges, num_partitions);
         let output_assignments: Vec<u32> = output_assignments_cpp.iter().copied().collect();
         Ok(output_assignments)
     }
@@ -199,6 +206,8 @@ impl PartitionerBuilder {
         }
 
         let (nodes, edges) = Self::create_edges_and_nodes(graph)?;
+        let nnodes = nodes.len() as u32;
+        let nedges = edges.len() as u32;
 
         let mut edge_weights: Vec<i32> = Vec::with_capacity(graph.edge_count());
         let mut node_weights: Vec<i32> = Vec::with_capacity(graph.node_count());
@@ -222,7 +231,7 @@ impl PartitionerBuilder {
         let output_assignments_cpp =
             partition_builder
                 .pin_mut()
-                .partition(nodes, edges, num_partitions);
+                .partition(nodes, nnodes, edges, nedges, num_partitions);
         let output_assignments: Vec<u32> = output_assignments_cpp.iter().copied().collect();
         Ok(output_assignments)
     }
