@@ -4,7 +4,7 @@
 #include <optional>
 #include "rust/cxx.h"
 
-#include "kaminpar/vendor/KaMinPar/kaminpar-shm/kaminpar.h"
+#include "kaminpar/vendor/KaMinPar/include/kaminpar-shm/kaminpar.h"
 
 class PartitionerBuilder
 {

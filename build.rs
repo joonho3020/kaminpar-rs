@@ -24,7 +24,7 @@ fn main() {
     println!("cargo:rerun-if-changed=src/kaminpar_wrapper.cc");
     println!("cargo:rerun-if-changed=include/kaminpar_wrapper.h");
     println!("cargo:rustc-link-search=native={}", path);
-    println!("cargo:rustc-link-lib=static=kaminpar_shm");
+    println!("cargo:rustc-link-lib=static=KaMinPar");
     println!("cargo:rustc-link-lib=dylib=tbb");
     println!("cargo:rustc-link-lib=dylib=tbbmalloc");
 }
